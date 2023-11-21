@@ -39,6 +39,20 @@ const validateAtLeastOneDigit = (password) => {
   return true;
 };
 
+const splitPasswordAtDigits = (password) => {
+  const substrings = password.split(/[0-9]+/);
+
+  const returnArray = [];
+
+  substrings.forEach((substring) => {
+    if (substring.length > 0) {
+      returnArray.push(substring);
+    }
+  });
+
+  return returnArray;
+};
+
 function App() {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
@@ -63,6 +77,7 @@ function App() {
   const handleTryPassword = () => { 
     event.preventDefault();
     setErrors({});
+    setValidPassword(null);
 
     if (validatePasswordLength(password) === false) {
       setErrors({
@@ -84,15 +99,13 @@ function App() {
       });
       return;
     }
+
+    const wordsInPassword = splitPasswordAtDigits(password);
+
+    wordsInPassword.forEach((word) => searchDictionary(word));
   };
 
-  const searchDictionary = async () => {
-    event.preventDefault();
-    setErrors({});
-
-    const searchTerm = password;
-    console.log(searchTerm);
-
+  const searchDictionary = async (searchTerm) => {
     try {
       const response = await fetch(
         `https://api.dictionaryapi.dev/api/v2/entries/en/${searchTerm}`
@@ -105,8 +118,7 @@ function App() {
       }
 
       if (response.status === 404) {
-        setValidPassword(searchTerm);
-        console.log(validPassword);
+        setValidPassword(password)
       }
     } catch (err) {
       console.error(err);
@@ -160,6 +172,9 @@ function App() {
               </Button>
             </Form.Group>
           </Form>
+        </Row>
+        <Row>
+          { errors.message || validPassword == null ? "" : <h3 className="text-validated">Success! &quot;{validPassword}&quot; is a valid password</h3> }
         </Row>
       </Container>
     </>
