@@ -1,8 +1,15 @@
-# React + Vite
+# Password Validator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a password validation app built with React. It allows a user to enter a password and then verifies that the password is between 8 and 16 characters long, contains only alphanumeric characters, has at least one digit, and contains no words found in the English dictionary.
 
-Currently, two official plugins are available:
+## Run Locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To install, clone this repo by typing `git clone https://github.com/jordanccox/password-validator.git` into your command line. Once cloned, type:
+
+```
+cd password-validator
+npm install
+npm run dev
+```
+
+Visit localhost:5173 in your web browser of choice. Enter a password into the input and click "Try Password" to see if it falls within the defined constraints. If it doesn't meet the requirements, you will get an error message telling you why your password was not valid. If it meets the requirements, you will get a success message.
