@@ -4,7 +4,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
 
 // Helper functions
 
@@ -60,7 +59,6 @@ function App() {
   const [showPassword, setShowPassword] = useState("password");
   const [validPassword, setValidPassword] = useState(null);
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -78,12 +76,10 @@ function App() {
 
   const handleTryPassword = () => { 
     event.preventDefault();
-    setIsLoading(true);
     setErrors({});
     setValidPassword(null);
 
     if (validatePasswordLength(password) === false) {
-      setIsLoading(false);
       setErrors({
         message: "Password must be between 8 and 16 characters"
       });
@@ -91,7 +87,6 @@ function App() {
     }
 
     if (validatePasswordCharacters(password) === false) {
-      setIsLoading(false);
       setErrors({
         message: "Password must only contain alphanumeric characters"
       });
@@ -99,7 +94,6 @@ function App() {
     }
 
     if (validateAtLeastOneDigit(password) === false) {
-      setIsLoading(false);
       setErrors({
         message: "Password must contain at least one digit"
       });
@@ -118,14 +112,12 @@ function App() {
       );
 
       if (response.status === 200) {
-        setIsLoading(false);
         setErrors({
           message: "Password cannot contain words found in the English dictionary",
         });
       }
 
       if (response.status === 404) {
-        setIsLoading(false);
         setValidPassword(password)
       }
     } catch (err) {
@@ -182,11 +174,6 @@ function App() {
           </Form>
         </Row>
         <Row>
-          { isLoading ? (
-            <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          ) : ""}
           { errors.message || validPassword == null ? "" : <h3 className="text-validated">Success! &quot;{validPassword}&quot; is a valid password</h3> }
         </Row>
       </Container>
