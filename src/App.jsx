@@ -118,6 +118,7 @@ function App() {
       );
 
       if (response.status === 200) {
+        setIsLoading(false);
         setErrors({
           message: "Password cannot contain words found in the English dictionary",
         });
