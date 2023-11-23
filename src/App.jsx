@@ -102,23 +102,30 @@ function App() {
 
     const wordsInPassword = splitPasswordAtDigits(password);
 
-    wordsInPassword.forEach((word) => searchDictionary(word));
+    searchDictionaryForWords(wordsInPassword);
   };
 
-  const searchDictionary = async (searchTerm) => {
+  const searchDictionaryForWords = async (words) => {
     try {
-      const response = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${searchTerm}`
-      );
+      let invalidPassword = false;
 
-      if (response.status === 200) {
-        setErrors({
-          message: "Password cannot contain words found in the English dictionary",
-        });
+      for (let word of words) {
+        const response = await fetch(
+          `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+
+        if (response.status != 404) {
+          invalidPassword = true;
+          break;
+        }
       }
 
-      if (response.status === 404) {
-        setValidPassword(password)
+      if (invalidPassword) {
+        setErrors({
+          message: "Password cannot contain words found in the English dictionary"
+        });
+      } else {
+        setValidPassword(password);
       }
     } catch (err) {
       console.error(err);
